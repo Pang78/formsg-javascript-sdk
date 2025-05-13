@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { 
   AlertDialog,
   AlertDialogAction,
@@ -21,61 +21,17 @@ import { toast } from "sonner";
 
 // In the actual implementation, this would be fetched from the API
 import { submissionService } from "@/lib/services";
-
-// Sample data - in a real app this would come from an API/database
-const DEMO_SUBMISSIONS = [
-  {
-    id: "sub1",
-    formId: "form1",
-    formName: "Customer Feedback",
-    submissionId: "5e53ec96b10ee1010e00380b",
-    submittedAt: "2023-05-10T09:15:32Z",
-    data: {
-      name: "John Smith",
-      email: "john@example.com",
-      feedback: "Great service! I really appreciated how quickly my issue was resolved. The staff was very professional.",
-      rating: "5"
-    }
-  },
-  {
-    id: "sub2",
-    formId: "form1",
-    formName: "Customer Feedback",
-    submissionId: "6f64fd07c21ff121ef31491c",
-    submittedAt: "2023-05-11T14:22:45Z",
-    data: {
-      name: "Jane Doe",
-      email: "jane@example.com",
-      feedback: "Could improve response time. I had to wait longer than expected for a reply.",
-      rating: "3"
-    }
-  },
-  {
-    id: "sub3",
-    formId: "form2",
-    formName: "Job Application",
-    submissionId: "7g75ge18d32gg232fg42502d",
-    submittedAt: "2023-05-12T10:05:18Z",
-    data: {
-      name: "Sam Wilson",
-      email: "sam@example.com",
-      position: "Software Engineer",
-      experience: "5 years",
-      resume: "url-to-attachment",
-      coverLetter: "I am very interested in this position as it aligns with my career goals and expertise."
-    }
-  }
-];
+import { Submission } from "@/lib/services";
 
 export default function SubmissionDetailPage({ params }: { params: { id: string } }) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const [submission, setSubmission] = useState<any>(null);
+  const [submission, setSubmission] = useState<Submission | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [editedData, setEditedData] = useState<Record<string, unknown>>({});
 
   // Fetch submission data on component mount
-  useState(() => {
+  useEffect(() => {
     const fetchSubmission = async () => {
       try {
         const data = await submissionService.getSubmissionById(params.id);
@@ -88,7 +44,7 @@ export default function SubmissionDetailPage({ params }: { params: { id: string 
     };
     
     fetchSubmission();
-  });
+  }, [params.id]);
 
   if (!submission) {
     return (

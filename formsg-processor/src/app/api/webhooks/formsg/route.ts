@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import formsg from "@opengovsg/formsg-sdk";
 import { formService, submissionService } from "@/lib/services";
+import { FormResponse } from "@/lib/transforms";
 
 // Initialize the FormSG SDK
 const formsgSdk = formsg();
@@ -82,7 +83,11 @@ export async function POST(req: NextRequest) {
     try {
       // Convert the FormSG responses to a flat object for easier access
       const flatData: Record<string, unknown> = {};
-      submission.responses.forEach((response: any) => {
+      
+      // Handle both DecryptedContent and DecryptedContentAndAttachments types
+      const responses = 'responses' in submission ? submission.responses : [];
+      
+      responses.forEach((response: any) => {
         flatData[response.question] = response.answer || response.answerArray;
       });
       
@@ -92,7 +97,7 @@ export async function POST(req: NextRequest) {
         submissionId: body.submissionId, 
         submittedAt: body.created,
         data: flatData,
-        rawResponses: submission
+        rawResponses: 'responses' in submission ? submission as FormResponse : undefined
       });
       
       console.log("Submission saved successfully:", body.submissionId);
