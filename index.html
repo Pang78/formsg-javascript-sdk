@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FormSG Response Combiner & Cleaner</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>FormSG Response Combiner & Cleaner</h1>
+        <p>Combine and clean responses from multiple FormSG forms locally in your browser.</p>
+    </header>
+
+    <main>
+        <section id="input-section">
+            <h2>1. Add Encrypted Form Data</h2>
+            <div class="form-group">
+                <label for="secretKey">Form Secret Key:</label>
+                <input type="password" id="secretKey" placeholder="Paste your form secret key here">
+                <p class="warning">⚠️ Your secret key stays in your browser and is NOT sent anywhere. However, ensure you trust this page.</p>
+            </div>
+            <div class="form-group">
+                <label for="encryptedContent">Encrypted Response Payload (`encryptedContent`):</label>
+                <textarea id="encryptedContent" rows="8" placeholder="Paste the 'encryptedContent' string from one form submission here..."></textarea>
+            </div>
+            <button id="addDataBtn">Decrypt & Add Data</button>
+             <p id="error-message" class="error"></p>
+        </section>
+
+        <section id="data-section">
+            <h2>2. Combined & Cleaned Data</h2>
+            <div class="controls">
+                <button id="clearAllBtn">Clear All Data</button>
+                <button id="exportCsvBtn">Export as CSV</button>
+                </div>
+            <div id="table-container">
+                <table>
+                    <thead>
+                        <tr id="table-header-row">
+                            <!-- Headers will be dynamically generated -->
+                        </tr>
+                    </thead>
+                    <tbody id="table-body">
+                        <!-- Data rows will be dynamically generated -->
+                        <tr><td colspan="100%">No data added yet.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Operates locally in your browser. No data is uploaded.</p>
+    </footer>
+
+    <!-- We'll try loading the SDK from a CDN first -->
+    <script src="https://unpkg.com/@opengovsg/formsg-sdk@latest/dist/formsg-sdk.umd.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html> 
